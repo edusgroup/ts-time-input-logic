@@ -8,10 +8,16 @@ function oneChange (key: string, src: string, start: number): string {
   return src.substring(0, index) + key + src.substr(index + 1)
 }
 
+// 99:99
 export function keyDown (key: string, src: string, startRaw: number, endRaw: number): string {
   const start = startRaw < 0 ? 0 : startRaw
   const end = endRaw < 0 ? src.length : endRaw
   if (start === end) {
+    const keyNum = parseInt(key, 10)
+    if (start % 3 === 0 && (keyNum > 2 && start === 0 || keyNum > 5 && start !== 0)) {
+      return src.substring(0, start) + (keyNum + '').padStart(2, '0') + src.substring(start + 2)
+    }
+
     return oneChange(key, src, start)
   }
 
@@ -64,11 +70,17 @@ export function mouseWheel (src: string, start: number, direction: number): stri
   let chunkIndex = Math.abs(Math.round((start + 1) / 3 - 0.6))
   chunkIndex = chunkIndex >= chunks.length ? chunks.length - 1 : chunkIndex
 
-  let chunk = parseInt(chunks[chunkIndex], 10) + direction
-  chunk = chunk > CHUNKS_LIMIT[chunkIndex] ? 0 : (chunk < 0 ? CHUNKS_LIMIT[chunkIndex] : chunk)
-  chunks[chunkIndex] = (chunk + '').padStart(2, '0')
+  for (let i = chunkIndex; i >= 0; i -= 1) {
+    let chunk = parseInt(chunks[i], 10) + direction
+    if (0 <= chunk && chunk <= CHUNKS_LIMIT[i]) {
+      chunks[i] = chunk + ''
+      break
+    }
+    chunk = chunk > CHUNKS_LIMIT[i] ? 0 : CHUNKS_LIMIT[i]
+    chunks[i] = chunk + ''
+  }
 
-  return chunks.join(':')
+  return chunks.map(chunk => chunk.padStart(2, '0')).join(':')
 }
 
 // let str: string

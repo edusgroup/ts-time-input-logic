@@ -1,12 +1,14 @@
 import * as api from '../src'
 
 test('keyDown without selection', () => {
-  expect(api.keyDown('5', '12:34', 0, 0)).toBe('52:34')
+  expect(api.keyDown('5', '12:34', 0, 0)).toBe('05:34')
   expect(api.keyDown('5', '12:34', 1, 1)).toBe('15:34')
   expect(api.keyDown('5', '12:34', 2, 2)).toBe('15:34')
   expect(api.keyDown('5', '12:34', 3, 3)).toBe('12:54')
   expect(api.keyDown('5', '12:34', 4, 4)).toBe('12:35')
   expect(api.keyDown('5', '12:34', 5, 5)).toBe('12:35')
+
+  expect(api.keyDown('6', '12:34', 3, 3)).toBe('12:06')
 })
 
 test('keyDown with selection', () => {
@@ -40,8 +42,8 @@ test('mouseWheel', () => {
   // in the end
   expect(api.mouseWheel('12:34', 5, 1)).toBe('12:35')
   expect(api.mouseWheel('12:34', 100, 1)).toBe('12:35')
-  expect(api.mouseWheel('12:59', 3, 1)).toBe('12:00')
-  expect(api.mouseWheel('12:00', 3, -1)).toBe('12:59')
+  expect(api.mouseWheel('12:59', 3, 1)).toBe('13:00')
+  expect(api.mouseWheel('12:00', 3, -1)).toBe('11:59')
 })
 
 test('keyDownRemove', () => {
